@@ -4,6 +4,10 @@
   "description": "Makes the addressbar of the browser work just like a normal input",
   "main": "index.js",
   "scripts": {
+    "commitlint": "commitlint --edit",
+    "format": "eslint --fix \"**/*.js\" \"**/*.ts\" && prettier --write \"**/*.js\" \"**/*.ts\" \"**/*.md\" \"**/*.json\"",
+    "lint": "eslint \"**/*.js\" \"**/*.ts\" && prettier --check \"**/*.js\" \"**/*.ts\" \"**/*.md\" \"**/*.json\"",
+    "prepare": "husky || true",
     "prestart": "npm run build",
     "start": "python -m SimpleHTTPServer 3001",
     "pretest": "npm run lint && npm run build",
@@ -32,26 +36,24 @@
   },
   "homepage": "https://github.com/cerebral/addressbar#readme",
   "devDependencies": {
-    "commitizen": "^2.5.0",
-    "cz-customizable": "^2.7.0",
-    "ghooks": "^1.0.3",
-    "nodeunit": "^0.9.1",
-    "selenium-webdriver": "^2.46.1",
-    "semantic-release": "^4.3.5",
-    "standard": "^5.4.1",
-    "validate-commit-msg": "^1.0.0",
-    "webpack": "^1.12.1"
-  },
-  "dependencies": {
-    "eventemitter3": "^2.0.2",
-    "url-parse": "^1.0.5"
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@typescript-eslint/eslint-plugin": "7.5.0",
+    "@typescript-eslint/parser": "7.5.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
   },
   "config": {
     "commitizen": {
-      "path": "node_modules/cz-customizable"
-    },
-    "ghooks": {
-      "commit-msg": "validate-commit-msg"
+      "path": "node_modules/cz-conventional-changelog"
     }
   }
 }
