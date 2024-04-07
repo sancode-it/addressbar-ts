@@ -1,4 +1,6 @@
 src
+coverage
 commitlint.config.js
-vite.config.js
+vite.config.mjs
 tsconfig.json
+.*
