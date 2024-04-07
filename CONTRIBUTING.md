@@ -1,4 +1,4 @@
-# Contributing to Cerebral
+# Contributing to addressbar
 
 Please take a moment to review this document in order to make the contribution
 process easy and effective for everyone involved.
@@ -8,19 +8,17 @@ the developers managing and developing this open source project. In return,
 they should reciprocate that respect in addressing your issue, assessing
 changes, and helping you finalize your pull requests.
 
-
 ## Using the issue tracker
 
 The issue tracker is the preferred channel for [bug reports](#bugs),
 [features requests](#features) and [submitting pull
 requests](#pull-requests), but please respect the following restrictions:
 
-* Please **do not** use the issue tracker for personal support requests. Use
+- Please **do not** use the issue tracker for personal support requests. Use
   the [Cerebral Chat](https://discord.gg/0kIweV4bd2bwwsvH).
 
-* Please **do not** derail or troll issues. Keep the discussion on topic and
+- Please **do not** derail or troll issues. Keep the discussion on topic and
   respect the opinions of others.
-
 
 ## Bug reports
 
@@ -61,14 +59,12 @@ Example:
 > causing the bug, and potential solutions (and your opinions on their
 > merits).
 
-
 ## Feature requests
 
 Feature requests are welcome. But take a moment to find out whether your idea
-fits with the scope and aims of the project. It's up to *you* to make a strong
+fits with the scope and aims of the project. It's up to _you_ to make a strong
 case to convince the project's developers of the merits of this feature. Please
 provide as much detail and context as possible.
-
 
 ## Pull requests
 
@@ -136,7 +132,7 @@ included in the project:
    ```
 
 8. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
-    with a clear title and description.
+   with a clear title and description.
 
 9. If you are asked to amend your changes before they can be merged in, please
    use `git commit --amend` (or rebasing for multi-commit Pull Requests) and
@@ -158,9 +154,9 @@ included in the project:
    We follow [Angular’s Commit Message Conventions][commit-message-conventions].
    But don’t worry about it, we are happy to help :)
 
-
 **IMPORTANT**: By submitting a patch, you agree to license your work under the
 same license as that used by the project.
+
 <!--
 ## Triagers
 
@@ -168,6 +164,7 @@ There is a [defined process](TRIAGING.md) to manage issues, because this helps t
 Triaging is a great way to contribute to Cerebral without having to write code.
 If you are interested, please [leave a comment here]() asking to join the triaging team.
 -->
+
 ## Maintainers
 
 If you have commit access, please follow this process for merging patches and cutting new releases.
