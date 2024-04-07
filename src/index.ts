@@ -1,46 +1,46 @@
-/* global history */
+import url from 'url-parse'
+import { EventEmitter } from 'eventemitter3'
 
-var URL = require('url-parse')
-var EventEmitter = require('eventemitter3').EventEmitter
-var instance = null
+class CustomEventEmitter extends EventEmitter {
+  addEventListener = this.addListener
+  removeEventListener = this.removeListener
+}
 
-// Check if IE history polyfill is added
-var location = window.history.location || window.location
+let instance: CustomEventEmitter | null = null
 
-module.exports = (function () {
+export default (() => {
   if (instance) {
     return instance
   }
 
-  var eventEmitter = new EventEmitter()
+  const eventEmitter = new CustomEventEmitter()
 
-  eventEmitter.addEventListener = eventEmitter.addListener
-  eventEmitter.removeEventListener = eventEmitter.removeListener
+  const initialUrl = location.href
+  const uri = url(initialUrl)
+  const origin = uri.protocol + '//' + uri.host
+  let isPreventingDefault = false
+  let doReplace = false
+  let prevUrl = ''
+  let isEmitting = false
+  let setSyncUrl = false
 
-  var initialUrl = location.href
-  var uri = URL(initialUrl)
-  var origin = uri.protocol + '//' + uri.host
-  var isPreventingDefault = false
-  var doReplace = false
-  var prevUrl = ''
-  // var linkClicked = false
-  var isEmitting = false
-  var setSyncUrl = false
-
-  var emitChange = function (url, event) {
+  const emitChange = (
+    url?: string | undefined,
+    event?: MouseEvent | TouchEvent | undefined
+  ) => {
     eventEmitter.emit('change', {
-      preventDefault: function () {
+      preventDefault: () => {
         event && event.preventDefault()
         isPreventingDefault = true
       },
       target: {
-        value: url ? origin + url : location.href
-      }
+        value: url ? origin + url : location.href,
+      },
     })
   }
 
-  var onUrlChange = function (type) {
-    return function (event) {
+  const onUrlChange = () => {
+    return () => {
       if (location.href === prevUrl) {
         return
       }
@@ -55,7 +55,11 @@ module.exports = (function () {
       isEmitting = false
 
       if (!setSyncUrl && isPreventingDefault) {
-        history.replaceState({}, '', (prevUrl || initialUrl).replace(origin, ''))
+        history.replaceState(
+          {},
+          '',
+          (prevUrl || initialUrl).replace(origin, '')
+        )
       }
 
       prevUrl = location.href
@@ -70,21 +74,23 @@ module.exports = (function () {
   // see also https://github.com/visionmedia/page.js/pull/240
   if (document.readyState !== 'complete') {
     // load event has not fired
-    global.addEventListener('load', function () {
-      setTimeout(function () {
-        global.addEventListener('popstate', onUrlChange('pop'), false)
-      }, 0)
-    }, false)
+    addEventListener(
+      'load',
+      () => {
+        setTimeout(() => {
+          addEventListener('popstate', onUrlChange(), false)
+        }, 0)
+      },
+      false
+    )
   } else {
     // load event has fired
-    global.addEventListener('popstate', onUrlChange('pop'), false)
+    addEventListener('popstate', onUrlChange(), false)
   }
 
   Object.defineProperty(eventEmitter, 'value', {
-    get: function () {
-      return location.href
-    },
-    set: function (value) {
+    get: () => location.href,
+    set: (value) => {
       if (typeof value !== 'string') {
         doReplace = Boolean(value.replace)
         value = value.value
@@ -117,46 +123,36 @@ module.exports = (function () {
 
       prevUrl = location.href
       isPreventingDefault = false
-    }
+    },
   })
 
   // expose URLUtils like API https://developer.mozilla.org/en-US/docs/Web/API/URLUtils
   // thanks https://github.com/cofounders/urlutils for reference
   Object.defineProperty(eventEmitter, 'origin', {
-    get: function () {
-      var uri = URL(location.href)
+    get: () => {
+      const uri = url(location.href)
       return uri.protocol + '//' + uri.host
-    }
+    },
   })
 
   Object.defineProperty(eventEmitter, 'protocol', {
-    get: function () {
-      return URL(location.href).protocol
-    }
+    get: () => url(location.href).protocol,
   })
 
   Object.defineProperty(eventEmitter, 'port', {
-    get: function () {
-      return URL(location.href).port
-    }
+    get: () => url(location.href).port,
   })
 
   Object.defineProperty(eventEmitter, 'hostname', {
-    get: function () {
-      return URL(location.href).hostname
-    }
+    get: () => url(location.href).hostname,
   })
 
   Object.defineProperty(eventEmitter, 'pathname', {
-    get: function () {
-      return URL(location.href).pathname
-    }
+    get: () => url(location.href).pathname,
   })
 
   Object.defineProperty(eventEmitter, 'hash', {
-    get: function () {
-      return URL(location.href).hash
-    }
+    get: () => url(location.href).hash,
   })
 
   /*
@@ -164,51 +160,73 @@ module.exports = (function () {
     kinds of scenarios with hyperlinks, thanks!
   */
 
-  var isSameOrigin = function (href) {
-    return (href && (href.indexOf(origin) === 0))
-  }
+  const isSameOrigin = (href: string) => href && href.indexOf(origin) === 0
 
-  var getClickedHref = function (event) {
+  const getClickedHref = (event: MouseEvent | TouchEvent) => {
     // check which button
-    if ((event.which === null ? event.button : event.which) !== 1) { return false }
+    if (event instanceof MouseEvent && event.button !== 0) {
+      return false
+    }
 
     // check for modifiers
-    if (event.metaKey || event.ctrlKey || event.shiftKey) { return false }
-    if (event.defaultPrevented) { return false }
+    if (event.metaKey || event.ctrlKey || event.shiftKey) {
+      return false
+    }
+    if (event.defaultPrevented) {
+      return false
+    }
+
+    // check if target is HTML element
+    if (!(event.target instanceof HTMLElement)) {
+      return false
+    }
 
     // ensure link
-    var element = event.target
-    while (element && element.nodeName !== 'A') { element = element.parentNode }
-    if (!element || element.nodeName !== 'A') { return false }
+    let element = event.target
+    while (element && element.nodeName !== 'A') {
+      element = element.parentNode as HTMLElement
+    }
+    if (!element || element.nodeName !== 'A') {
+      return false
+    }
+
+    const anchorElement: HTMLAnchorElement = element as HTMLAnchorElement
 
     // Ignore if tag has
     // 1. "download" attribute
     // 2. rel="external" attribute
-    if (element.hasAttribute('download') || element.getAttribute('rel') === 'external') { return false }
+    if (
+      anchorElement.hasAttribute('download') ||
+      anchorElement.getAttribute('rel') === 'external'
+    ) {
+      return false
+    }
 
     // Check for mailto: in the href
-    var href = element.getAttribute('href')
-    if (href && href.indexOf('mailto:') > -1) { return false }
+    const href = anchorElement.getAttribute('href')
+    if (href && href.indexOf('mailto:') > -1) {
+      return false
+    }
 
     // check target
-    if (element.target) { return false }
+    if (anchorElement.hasAttribute('target')) {
+      return false
+    }
 
     // x-origin
-    if (!isSameOrigin(element.href)) { return false }
+    if (!isSameOrigin(anchorElement.href)) {
+      return false
+    }
 
     return href
   }
 
-  global.addEventListener(document.ontouchstart ? 'touchstart' : 'click', function (event) {
-    var href = getClickedHref(event)
+  addEventListener(document.ontouchstart ? 'touchstart' : 'click', (event) => {
+    const href = getClickedHref(event)
     if (href) {
-      // linkClicked = true
       isEmitting = true
       emitChange(href, event)
       isEmitting = false
-      if (isPreventingDefault) {
-        // linkClicked = false
-      }
       prevUrl = href
       isPreventingDefault = false
     }
@@ -217,4 +235,4 @@ module.exports = (function () {
   instance = eventEmitter
 
   return eventEmitter
-}())
+})()

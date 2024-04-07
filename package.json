@@ -1,24 +1,30 @@
 {
-  "name": "addressbar",
+  "name": "addressbar-ts",
   "version": "0.0.0-semantically-released",
   "description": "Makes the addressbar of the browser work just like a normal input",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
+    "build": "(npm run build:lib & npm run build:es) && npm run build:dist",
+    "build:lib": "tsc --outDir lib --module commonjs --target es6",
+    "build:es": "tsc",
+    "build:dist": "vite build",
     "commitlint": "commitlint --edit",
     "format": "eslint --fix \"**/*.js\" \"**/*.ts\" && prettier --write \"**/*.js\" \"**/*.ts\" \"**/*.md\" \"**/*.json\"",
     "lint": "eslint \"**/*.js\" \"**/*.ts\" && prettier --check \"**/*.js\" \"**/*.ts\" \"**/*.md\" \"**/*.json\"",
+    "postbuild": "cp dist/* src/tests",
+    "posttest": "npm run typecheck",
     "prepare": "husky || true",
     "prestart": "npm run build",
-    "start": "python -m SimpleHTTPServer 3001",
-    "pretest": "npm run lint && npm run build",
-    "test": "nodeunit tests/index.js",
-    "build": "webpack",
-    "lint": "standard",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "start": "python -m http.server -d src/tests -b localhost 3001",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cerebral/addressbar.git"
+    "url": "https://github.com/sancode-it/addressbar-ts.git"
   },
   "keywords": [
     "router",
@@ -28,16 +34,24 @@
   ],
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "contributors": [
-    "Aleksey Guryanov <gurianov@gmail.com>"
+    "Aleksey Guryanov <gurianov@gmail.com>",
+    "Henri Hulski <henri@sancode.it>"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cerebral/addressbar/issues"
+    "url": "https://github.com/sancode-it/addressbar-ts/issues"
   },
-  "homepage": "https://github.com/cerebral/addressbar#readme",
+  "homepage": "https://github.com/sancode-it/addressbar-ts#readme",
+  "dependencies": {
+    "eventemitter3": "^5.0.1",
+    "url-parse": "^1.5.10"
+  },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
+    "@types/eventemitter3": "^2.0.2",
+    "@types/selenium-webdriver": "^4.1.22",
+    "@types/url-parse": "^1.4.11",
     "@typescript-eslint/eslint-plugin": "7.5.0",
     "@typescript-eslint/parser": "7.5.0",
     "cz-conventional-changelog": "^3.3.0",
@@ -50,6 +64,11 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
+    "selenium-webdriver": "^4.19.0",
+    "semantic-release": "^23.0.7",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.8",
+    "vitest": "^1.4.0"
   },
   "config": {
     "commitizen": {
