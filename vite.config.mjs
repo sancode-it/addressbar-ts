@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
@@ -10,7 +11,12 @@ export default defineConfig({
       formats: ['umd'],
       fileName: 'addressbar',
     },
-    minify: false,
+    minify: true,
     sourcemap: true,
+  },
+  test: {
+    testFiles: ['src/tests/**/*.test.ts'],
+    testTimeout: 20000,
+    hookTimeout: 40000,
   },
 })
