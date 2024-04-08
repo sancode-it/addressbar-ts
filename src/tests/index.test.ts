@@ -3,14 +3,14 @@ import { Browser, Builder, By, WebDriver } from 'selenium-webdriver'
 import { Options } from 'selenium-webdriver/chrome'
 
 const baseUrl = 'http://localhost:3001/'
-const preventUrl = baseUrl + 'preventdefault/'
-const setUrl = baseUrl + 'set/'
-const popstateUrl = baseUrl + 'popstate/'
-const hashUrl = baseUrl + 'hash/'
-const trailingUrl = baseUrl + 'trailing/'
-const uichange = baseUrl + 'uichange/'
-const replace = baseUrl + 'replace/'
-const uri = baseUrl + 'uri/'
+const preventUrl = baseUrl + 'src/tests/preventdefault/'
+const setUrl = baseUrl + 'src/tests/set/'
+const popstateUrl = baseUrl + 'src/tests/popstate/'
+const hashUrl = baseUrl + 'src/tests/hash/'
+const trailingUrl = baseUrl + 'src/tests/trailing/'
+const uichange = baseUrl + 'src/tests/uichange/'
+const replace = baseUrl + 'src/tests/replace/'
+const uri = baseUrl + 'src/tests/uri/'
 
 describe('addressbar', () => {
   const options: Options = new Options()
@@ -150,9 +150,9 @@ describe('addressbar', () => {
 
     await driver.navigate().back()
     url = await driver.getCurrentUrl()
-    expect(url).toBe(baseUrl + 'uichange/')
+    expect(url).toBe(baseUrl + 'src/tests/uichange/')
     text = await driver.findElement(By.id('url')).getText()
-    expect(text).toBe(baseUrl + 'uichange/')
+    expect(text).toBe(baseUrl + 'src/tests/uichange/')
 
     await driver.findElement(By.id('messages')).click()
     url = await driver.getCurrentUrl()
@@ -162,9 +162,9 @@ describe('addressbar', () => {
 
     await driver.navigate().back()
     url = await driver.getCurrentUrl()
-    expect(url).toBe(baseUrl + 'uichange/')
+    expect(url).toBe(baseUrl + 'src/tests/uichange/')
     text = await driver.findElement(By.id('url')).getText()
-    expect(text).toBe(baseUrl + 'uichange/')
+    expect(text).toBe(baseUrl + 'src/tests/uichange/')
   })
 
   test('should be able to move back and forward with mix of url and setting manually and still use back button', async () => {
@@ -214,9 +214,9 @@ describe('addressbar', () => {
 
     await driver.navigate().back()
     url = await driver.getCurrentUrl()
-    expect(url).toBe(baseUrl + 'uichange/')
+    expect(url).toBe(baseUrl + 'src/tests/uichange/')
     text = await driver.findElement(By.id('url')).getText()
-    expect(text).toBe(baseUrl + 'uichange/')
+    expect(text).toBe(baseUrl + 'src/tests/uichange/')
   })
 
   test('should be able to replace the set url', async () => {
@@ -232,9 +232,9 @@ describe('addressbar', () => {
 
     await driver.navigate().back()
     url = await driver.getCurrentUrl()
-    expect(url).toBe('http://localhost:3001/replace/')
+    expect(url).toBe('http://localhost:3001/src/tests/replace/')
     text = await driver.findElement(By.id('url')).getText()
-    expect(text).toBe('http://localhost:3001/replace/')
+    expect(text).toBe('http://localhost:3001/src/tests/replace/')
 
     await driver.findElement(By.id('home')).click()
     url = await driver.getCurrentUrl()
@@ -255,7 +255,7 @@ describe('addressbar', () => {
     await driver.get(uri)
 
     url = await driver.getCurrentUrl()
-    expect(url).toBe('http://localhost:3001/uri/')
+    expect(url).toBe('http://localhost:3001/src/tests/uri/')
     text = await driver.findElement(By.id('origin')).getText()
     expect(text).toBe('http://localhost:3001')
     text = await driver.findElement(By.id('protocol')).getText()
@@ -265,7 +265,7 @@ describe('addressbar', () => {
     text = await driver.findElement(By.id('hostname')).getText()
     expect(text).toBe('localhost')
     text = await driver.findElement(By.id('pathname')).getText()
-    expect(text).toBe('/uri/')
+    expect(text).toBe('/src/tests/uri/')
     text = await driver.findElement(By.id('hash')).getText()
     expect(text).toBe('')
 

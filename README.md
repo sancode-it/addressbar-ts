@@ -65,8 +65,8 @@ On Debian you can install the driver with `apt install chromium-driver`.
 Run tests:
 
 - `npm install`
-- `npm start` (fires up a python webservice)
-- `npm test` (Runs tests)
+- `npm start` (fires up http-server)
+- `npm test` (Runs tests after build)
 
 [npm-image]: https://img.shields.io/npm/v/addressbar.svg?style=flat
 [npm-url]: https://npmjs.org/package/addressbar
