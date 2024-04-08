@@ -35,4 +35,4 @@ jobs:
         uses: BerniWittmann/background-server-action@v1
         with:
           command: npm test
-          start: npm start
+          start: npm start -- --silent
