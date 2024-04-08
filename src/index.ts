@@ -1,19 +1,21 @@
 import url from 'url-parse'
 import { EventEmitter } from 'eventemitter3'
 
-class CustomEventEmitter extends EventEmitter {
+export type { Addressbar }
+
+class Addressbar extends EventEmitter {
   addEventListener = this.addListener
   removeEventListener = this.removeListener
 }
 
-let instance: CustomEventEmitter | null = null
+let instance: Addressbar | null = null
 
 export default (() => {
   if (instance) {
     return instance
   }
 
-  const eventEmitter = new CustomEventEmitter()
+  const addressbar = new Addressbar()
 
   const initialUrl = location.href
   const uri = url(initialUrl)
@@ -28,7 +30,7 @@ export default (() => {
     url?: string | undefined,
     event?: MouseEvent | TouchEvent | undefined
   ) => {
-    eventEmitter.emit('change', {
+    addressbar.emit('change', {
       preventDefault: () => {
         event && event.preventDefault()
         isPreventingDefault = true
@@ -88,7 +90,7 @@ export default (() => {
     addEventListener('popstate', onUrlChange(), false)
   }
 
-  Object.defineProperty(eventEmitter, 'value', {
+  Object.defineProperty(addressbar, 'value', {
     get: () => location.href,
     set: (value) => {
       if (typeof value !== 'string') {
@@ -128,30 +130,30 @@ export default (() => {
 
   // expose URLUtils like API https://developer.mozilla.org/en-US/docs/Web/API/URLUtils
   // thanks https://github.com/cofounders/urlutils for reference
-  Object.defineProperty(eventEmitter, 'origin', {
+  Object.defineProperty(addressbar, 'origin', {
     get: () => {
       const uri = url(location.href)
       return uri.protocol + '//' + uri.host
     },
   })
 
-  Object.defineProperty(eventEmitter, 'protocol', {
+  Object.defineProperty(addressbar, 'protocol', {
     get: () => url(location.href).protocol,
   })
 
-  Object.defineProperty(eventEmitter, 'port', {
+  Object.defineProperty(addressbar, 'port', {
     get: () => url(location.href).port,
   })
 
-  Object.defineProperty(eventEmitter, 'hostname', {
+  Object.defineProperty(addressbar, 'hostname', {
     get: () => url(location.href).hostname,
   })
 
-  Object.defineProperty(eventEmitter, 'pathname', {
+  Object.defineProperty(addressbar, 'pathname', {
     get: () => url(location.href).pathname,
   })
 
-  Object.defineProperty(eventEmitter, 'hash', {
+  Object.defineProperty(addressbar, 'hash', {
     get: () => url(location.href).hash,
   })
 
@@ -232,7 +234,7 @@ export default (() => {
     }
   })
 
-  instance = eventEmitter
+  instance = addressbar
 
-  return eventEmitter
+  return addressbar
 })()
