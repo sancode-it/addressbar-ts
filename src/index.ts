@@ -6,6 +6,24 @@ export type { Addressbar }
 class Addressbar extends EventEmitter {
   addEventListener = this.addListener
   removeEventListener = this.removeListener
+  value: string
+  origin: string
+  protocol: string
+  port: string
+  hostname: string
+  pathname: string
+  hash: string
+
+  constructor() {
+    super()
+    this.value = ''
+    this.origin = ''
+    this.protocol = ''
+    this.port = ''
+    this.hostname = ''
+    this.pathname = ''
+    this.hash = ''
+  }
 }
 
 let instance: Addressbar | null = null

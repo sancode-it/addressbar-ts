@@ -14,8 +14,6 @@
     <script src="/dist/addressbar.umd.js"></script>
     <script>
       addressbar.addEventListener('change', function (event) {
-
-        console.log('Got change', event.target.value);
         event.preventDefault();
         var url = event.target.value;
         addressbar.value = url;
