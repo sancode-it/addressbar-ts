@@ -6,7 +6,7 @@ export type { Addressbar }
 class Addressbar extends EventEmitter {
   addEventListener = this.addListener
   removeEventListener = this.removeListener
-  value: string
+  value: string | { value: string; replace: boolean }
   origin: string
   protocol: string
   port: string
