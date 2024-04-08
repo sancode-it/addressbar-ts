@@ -55,18 +55,28 @@ This is low level code, so there is no routing logic here. Please check out
 Addressbar listens to `popstate` events and handles hyperlinks.It basically has logic to simulate
 how an input works, also handling a few edge cases.
 
+## TypeScript
+
+Addressbar is now written in TypeScript and you can import `addressbar`
+and the `Addressbar` class type with:
+
+```ts
+import addressbar from 'addressbar-ts'
+import type { Addressbar } from 'addressbar-ts'
+```
+
 ## Tests
 
 Addressbar is running with selenium-driver and vitest to test live in Chrome. Requires
-[selenium chrome driver](https://googlechromelabs.github.io/chrome-for-testing/) to be
-installed and added to **PATH**.
-On Debian you can install the driver with `apt install chromium-driver`.
+the Chrome or Chromium browser to be installed.
 
 Run tests:
 
-- `npm install`
-- `npm start` (fires up http-server)
-- `npm test` (Runs tests after build)
+```sh
+npm install
+npm start   # Fires up the http-server
+npm test    # Runs tests after running build
+```
 
 [npm-image]: https://img.shields.io/npm/v/addressbar.svg?style=flat
 [npm-url]: https://npmjs.org/package/addressbar
