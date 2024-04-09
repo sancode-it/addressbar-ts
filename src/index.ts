@@ -6,23 +6,28 @@ export type { Addressbar }
 class Addressbar extends EventEmitter {
   addEventListener = this.addListener
   removeEventListener = this.removeListener
-  value: string | { value: string; replace: boolean }
-  origin: string
-  protocol: string
-  port: string
-  hostname: string
-  pathname: string
-  hash: string
+  #value = ''
+  origin: string = ''
+  protocol: string = ''
+  port: string = ''
+  hostname: string = ''
+  pathname: string = ''
+  hash: string = ''
 
-  constructor() {
-    super()
-    this.value = ''
-    this.origin = ''
-    this.protocol = ''
-    this.port = ''
-    this.hostname = ''
-    this.pathname = ''
-    this.hash = ''
+  /*
+    Getter and setter are stubs for TypeScript.
+    They should be implemented by the instance.
+  */
+  get value(): string {
+    return this.#value
+  }
+
+  set value(value: string | { value: string; replace: boolean }) {
+    if (typeof value !== 'string') {
+      value = value.value
+    }
+
+    this.#value = value
   }
 }
 
@@ -44,13 +49,10 @@ export default (() => {
   let isEmitting = false
   let setSyncUrl = false
 
-  const emitChange = (
-    url?: string | undefined,
-    event?: MouseEvent | TouchEvent | undefined
-  ) => {
+  const emitChange = (url?: string, event?: MouseEvent | TouchEvent) => {
     addressbar.emit('change', {
       preventDefault: () => {
-        event && event.preventDefault()
+        event?.preventDefault()
         isPreventingDefault = true
       },
       target: {
@@ -110,7 +112,7 @@ export default (() => {
 
   Object.defineProperty(addressbar, 'value', {
     get: () => location.href,
-    set: (value) => {
+    set: (value: string | { value: string; replace: boolean }) => {
       if (typeof value !== 'string') {
         doReplace = Boolean(value.replace)
         value = value.value
@@ -180,7 +182,7 @@ export default (() => {
     kinds of scenarios with hyperlinks, thanks!
   */
 
-  const isSameOrigin = (href: string) => href && href.indexOf(origin) === 0
+  const isSameOrigin = (href: string) => href?.indexOf(origin) === 0
 
   const getClickedHref = (event: MouseEvent | TouchEvent) => {
     // check which button
@@ -203,7 +205,7 @@ export default (() => {
 
     // ensure link
     let element = event.target
-    while (element && element.nodeName !== 'A') {
+    while (element?.nodeName !== 'A') {
       element = element.parentNode as HTMLElement
     }
     if (!element || element.nodeName !== 'A') {
