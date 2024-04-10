@@ -1,4 +1,4 @@
-src/tests
+src
 coverage
 commitlint.config.js
 vite.config.mjs
