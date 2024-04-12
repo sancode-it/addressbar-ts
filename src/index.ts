@@ -148,7 +148,7 @@ export default (() => {
     },
   })
 
-  // expose URLUtils like API https://developer.mozilla.org/en-US/docs/Web/API/URLUtils
+  // expose URLUtils like API https://developer.mozilla.org/en-US/docs/Web/API/URL
   // thanks https://github.com/cofounders/urlutils for reference
   Object.defineProperty(addressbar, 'origin', {
     get: () => {
